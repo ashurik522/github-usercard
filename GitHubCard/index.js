@@ -16,6 +16,20 @@ import axios from 'axios'
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+const followersArray = ['johnjx', 'tim-sansone', 'jzkime', 'joanterm', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+const entryPoint = document.querySelector(".cards");
+
+const getUsers = (username) =>{
+  axios.get(`https://api.github.com/users/${username}`)
+    .then((res)=>{
+      const gitData = res.data;
+      entryPoint.appendChild(userCard(gitData))
+
+    })
+    .catch((err)=> console.error(err))
+}
+
+followersArray.forEach(user=>{getUsers(user)})
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -28,7 +42,7 @@ import axios from 'axios'
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,7 +63,7 @@ const followersArray = [];
       </div>
     </div>
 */
-const userCard = (data) => {
+const userCard = (obj) => {
   const card = document.createElement("div");
   const userImg = document.createElement("img");
   const cardInfo = document.createElement("div");
@@ -65,7 +79,18 @@ const userCard = (data) => {
   card.classList.add("card");
   cardInfo.classList.add("card-info")
   name.classList.add("name")
-  userCard.classList.add("username")
+  username.classList.add("username")
+
+  userImg.src = obj.avatar_url;
+  name.textContent = obj.name;
+  username.textContent = obj.login;
+  location.textContent = `Location: ${obj.location}`;
+  profile.textContent = 'Profile: ';
+  link.textContent = 
+  link.href = obj.html_url;
+  followers.textContent = `Followers: ${obj.followers}`;
+  following.textContent = `Following: ${obj.following}`;
+  bio.textContent = `Bio: ${obj.bio}`;
 
   card.appendChild(userImg)
   card.appendChild(cardInfo)
@@ -79,6 +104,8 @@ const userCard = (data) => {
   profile.appendChild(link)
 
 
+
+  return card;
 }
 
 /*
